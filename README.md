@@ -110,7 +110,7 @@ shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 
 There are slight differences which is not surprising since we used two very different methods to compute the Shapley Values.
 
-## Overview of the ```nshap``` package
+## Overview of the package
 
 ### Computing $n$-Shapley Values
 
