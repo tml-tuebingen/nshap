@@ -8,11 +8,11 @@ $n$-Shapley Values are a natural extension of [Shapley Values](https://proceedin
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
 
-The computed $n$-Shapley Values are an estimate which can be inaccurate. Have a look at [this  Section below](#estimation).
+The computed $n$-Shapley Values are an estimate [that can be inaccurate](#estimation).
 
 ⚠️ Disclaimer
 
-This package does not provide an efficient way to compute Shapley Values. For this you should refer to the [shap](https://github.com/slundberg/shap/) package. In practice, the current implementation works for functions of up to ~10 variables. This package should be used for research purposes only.
+This package does not provide an efficient way to compute Shapley Values. For this you should refer to the [shap](https://github.com/slundberg/shap/) package. In practice, the current implementation works for arbitrary functions of up to ~10 variables. This package should be used for research purposes only.
 
 ## Setup
 
