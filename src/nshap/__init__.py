@@ -1,6 +1,12 @@
 from nshap.nShapleyValues import nShapleyValues
 
-from nshap.functions import delta_S, n_shapley_values, shapley_gam, shapley_values, bernoulli_numbers
+from nshap.functions import (
+    delta_S,
+    n_shapley_values,
+    shapley_gam,
+    shapley_values,
+    bernoulli_numbers,
+)
 from nshap.plot import plot_n_shapley
 from nshap.util import allclose, save, load, powerset
 

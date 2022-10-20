@@ -4,6 +4,7 @@ import numpy as np
 
 import nshap
 
+
 class nShapleyValues(collections.UserDict):
     """A class for n-Shapley Values. It is a subclass of collections.UserDict, so it is a dict with added functionality for n-Shapley Values."""
 
