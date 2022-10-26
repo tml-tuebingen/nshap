@@ -1,6 +1,7 @@
 # Welcome to the nshap Package!
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=g&style=plastic)](https://opensource.org/licenses/MIT)
+![tests](https://github.com/tml-tuebingen/nshap/workflows/pytesting/badge.svg)
 
 This is a python package to compute $n$-Shapley Values. 
 
