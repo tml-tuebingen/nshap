@@ -1,53 +1,42 @@
-nshap package
-=============
+The nshap package
+=================
 
-Submodules
-----------
-
-nshap.functions module
-----------------------
+Functions to compute n-Shapley Values
+-------------------------------------
 
 .. automodule:: nshap.functions
    :members:
    :undoc-members:
    :show-inheritance:
 
-nshap.nShapleyValues module
----------------------------
-
-.. automodule:: nshap.nShapleyValues
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nshap.plot module
------------------
-
-.. automodule:: nshap.plot
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nshap.util module
------------------
-
-.. automodule:: nshap.util
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nshap.vfunc module
-------------------
+Value Functions
+---------------
 
 .. automodule:: nshap.vfunc
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+The nShapleyValues class
+------------------------
 
-.. automodule:: nshap
+.. autoclass:: nshap.nShapleyValues.nShapleyValues
    :members:
    :undoc-members:
    :show-inheritance:
+
+Plotting and Utilities
+----------------------
+
+.. automodule:: nshap.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: nshap.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+

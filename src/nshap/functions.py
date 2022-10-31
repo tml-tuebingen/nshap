@@ -38,7 +38,7 @@ bernoulli_numbers = np.array(
 
 
 def delta_S(X, v_func, n):
-    """Compute $\Delta_S(x)$ for all points in X, and all S such that |S|=n, given a coalition value function.
+    """Compute :math:`{\\Delta}_S(x)` for all points in X, and all S such that |S|=n, given a coalition value function.
 
     Args:
         X (numpy.ndarray): Dataset
