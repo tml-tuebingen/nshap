@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="nshap",
-    version="0.0.1",
+    version="0.1.0",
     author="Sebastian Bordt",
     author_email="sbordt@posteo.de",
     description="Python package to compute n-Shapley Values.",

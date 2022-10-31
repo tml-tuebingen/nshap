@@ -1,3 +1,6 @@
+__version__ = '0.1.0'
+__author__ = 'Sebastian Bordt'
+
 from nshap.nShapleyValues import nShapleyValues
 
 from nshap.functions import (
