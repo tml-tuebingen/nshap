@@ -32,6 +32,11 @@ class nShapleyValues(collections.UserDict):
         return nShapleyValues(self.data.copy())
 
     def save(self, fname):
+        """Save the n-Shapley Values to a JSON file.
+
+        Args:
+            fname (str): Filename.
+        """
         nshap.save(self, fname)
 
     def plot(self, *args, **kwargs):
