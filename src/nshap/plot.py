@@ -52,7 +52,7 @@ def plot_n_shapley(
     """Generate the plots in the paper.
 
     Args:
-        n_shapley_values (nshap.nShapleyValues): The $n$-Shapley Values that we want to plot.
+        n_shapley_values (nshap.nShapleyValues): The n-Shapley Values that we want to plot.
         max_degree (int, optional): Plots all effect of order larger than max_degree with a single color. Defaults to None.
         axis (optional): Matplotlib axis on which to plot. Defaults to None.
         feature_names (_type_, optional): Used to label the x-axis. Defaults to None.

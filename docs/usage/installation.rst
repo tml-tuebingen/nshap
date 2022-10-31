@@ -1,6 +1,12 @@
 Installation
 ============
 
-To install the package run
+To install the package via pip run
 
-pip install nshap
+:code:`pip install nshap`
+
+then you can use
+
+:code:`import nshap`
+
+to import the package.

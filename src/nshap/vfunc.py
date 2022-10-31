@@ -17,8 +17,8 @@ def interventional_shap(
     In order to compute n-Shapley Values, a data set is sampled once and then fixed for all evaluations of the value function.
 
     Args:
-        f (function): The function to be explained. Will be called as f(x) where x has shape (1,d)
-        X (_type_): Sample from the data distribution
+        f (function): The function to be explained. Will be called as f(x) where x has shape (1,d).
+        X (_type_): Sample from the data distribution.
         target (int, optional): Target class. Required if the output of f(x) is multi-dimensional. Defaults to None.
         num_samples (int, optional): The number of samples  that should be drawn from X in order estimate the value function. Defaults to 1000.
         random_state (_type_, optional): Random state that is passed to np.random.default_rng. Used for reproducibility. Defaults to None.
@@ -71,7 +71,10 @@ class memoized_vfunc(object):
 
     The hash depends only on the values of x that are in the subset of coordinates.
 
-    This function is able to handle parameters x of shape (d,) and (1,d)
+    This function is able to handle parameters x of shape (d,) and (1,d).
+
+    Meomization helps to avoid duplicate evaluations of the value function, even if we perform
+    computations that involve the same term multiple times.
 
     https://wiki.python.org/moin/PythonDecoratorLibrary
     """

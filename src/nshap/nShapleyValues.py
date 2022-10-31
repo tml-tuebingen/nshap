@@ -6,7 +6,7 @@ import nshap
 
 
 class nShapleyValues(collections.UserDict):
-    """A class for n-Shapley Values. It is a subclass of collections.UserDict, so it is a dict with added functionality for n-Shapley Values."""
+    """This class stores n-Shapley Values. It is a dict with added functionality for n-Shapley Values."""
 
     def __init__(self, values):
         super().__init__(values)
@@ -14,16 +14,30 @@ class nShapleyValues(collections.UserDict):
         self.dim = len([x[0] for x in values.keys() if len(x) == 1])
 
     def sum(self):
+        """Sum all the terms that are invovled in the n-Shapley Values.
+
+        By definition, the result is equal to the value of the function that we attempt to explain, minus the value of the empty coalition.
+
+        Returns:
+            Float: The sum.
+        """
         return np.sum([x for x in self.data.values()])
 
     def copy(self):
+        """Return a copy of the current object.
+
+        Returns:
+            nshap.nShapleyValues: The copy.
+        """
         return nShapleyValues(self.data.copy())
 
     def save(self, fname):
         nshap.save(self, fname)
 
     def plot(self, *args, **kwargs):
-        """Generate the plots in the paper.
+        """Generate a plots of the n-Shapley Values.
+
+        This function simply calls nshap.plots.plot_n_shapley.
 
         Returns:
             The axis of the matplotlib plot.
@@ -41,10 +55,10 @@ class nShapleyValues(collections.UserDict):
         return shapley_values
 
     def k_shapley_values(self, k):
-        """Compute the k-Shapley Values (k <= n).
+        """Compute k-Shapley Values of lower order. Requires k <= n.
 
         Args:
-            k (int): The desired order k.
+            k (int): The desired order.
 
         Returns:
             nShapleyValues: k-Shapley Values.

@@ -11,6 +11,8 @@ import nshap
 def allclose(dict1, dict2, rtol=1e-05, atol=1e-08):
     """Compare if two dicts of n-Shapley Values are close according to numpy.allclose.
 
+    Useful for testing purposes.
+
     Args:
         dict1 (dict): The first dict.
         dict2 (dict): The second dict.
@@ -29,7 +31,7 @@ def allclose(dict1, dict2, rtol=1e-05, atol=1e-08):
 
 
 def save(values, fname):
-    """Save n-Shapley Values to a json file.
+    """Save n-Shapley Values to a JSON file.
 
     Args:
         values (nshap.nShapleyValues): The n-Shapley Values.
@@ -42,6 +44,7 @@ def save(values, fname):
 
 def to_int_tuple(str_tuple):
     """Convert string representations of integer tuples back to python integer tuples.
+
     This utility function is used to load n-Shapley Values from JSON.
 
     Args:
@@ -61,7 +64,7 @@ def to_int_tuple(str_tuple):
 
 
 def load(fname):
-    """Load n-Shapley Values from a json file.
+    """Load n-Shapley Values from a JSON file.
 
     Args:
         fname (str): Filename.
@@ -77,6 +80,6 @@ def load(fname):
 
 
 def powerset(iterable):
-    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    "The powerset function from https://docs.python.org/3/library/itertools.html#itertools-recipes."
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))

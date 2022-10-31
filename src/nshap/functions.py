@@ -38,7 +38,7 @@ bernoulli_numbers = np.array(
 
 
 def delta_S(X, v_func, n):
-    """Compute :math:`{\\Delta}_S(x)` for all points in X, and all S such that |S|=n, given a coalition value function.
+    """Compute the interaction primitive :math:`{\\Delta}_S(x)` for all points in X, and all S such that |S|=n, given a coalition value function.
 
     Args:
         X (numpy.ndarray): Dataset
@@ -46,7 +46,7 @@ def delta_S(X, v_func, n):
         n (int): Parameter for |S|=n.
 
     Returns:
-        list: List with a python dict for each datapoint. The dict contains the effects, indexed with sorted tuples of feature indices.
+        List: List with a python dict for each datapoint. The dict contains the effects, indexed with sorted tuples of feature indices.
     """
     # for n>20, we would have to consider the numerics of the problem more carefully
     assert n <= 20, "Computation is only supported for n<=20."
@@ -84,12 +84,12 @@ def delta_S(X, v_func, n):
 
 
 def n_shapley_values(X, v_func, n=-1):
-    """Compute n-Shapley Values.
+    """This function provides an exact computation of n-Shapley Values via their definition.
 
     Args:
-        X (numpy.ndarray): Dataset
+        X (numpy.ndarray): Dataset.
         v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
-        n (int, optional): Order of $n$-Shapley Values or -1 for n=d. Defaults to -1.
+        n (int, optional): Order of n-Shapley Values or -1 for n=d. Defaults to -1.
 
     Returns:
         nshap.nShapleyValues: nshap.nShapleyValues if there is a single datapoint, or list of nshap.nShapleyValues for multipe datapoints.
@@ -143,10 +143,10 @@ def n_shapley_values(X, v_func, n=-1):
 
 
 def shapley_gam(X, v_func):
-    """Evaluate the component functions of the Shapley-GAM. This is equivalent to computing d-Shapley Values, where d=number of features.
+    """This function evaluates the component functions of the Shapley-GAM. This is equivalent to computing d-Shapley Values, where d=number of features.
 
     Args:
-        X (numpy.ndarray): Dataset
+        X (numpy.ndarray): Dataset.
         v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
 
     Returns:
@@ -188,7 +188,7 @@ def shapley_values(X, v_func):
     """Compute the original Shapley Values, according to the Shapley Formula.
 
     Args:
-        X (numpy.ndarray): Dataset
+        X (numpy.ndarray): Dataset.
         v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
 
     Returns:

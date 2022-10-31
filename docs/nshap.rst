@@ -1,8 +1,8 @@
-The nshap package
-=================
+Documentation
+=============
 
-Functions to compute n-Shapley Values
--------------------------------------
+Functions that compute n-Shapley Values
+---------------------------------------
 
 .. automodule:: nshap.functions
    :members:
