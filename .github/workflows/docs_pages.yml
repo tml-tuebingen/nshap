@@ -47,5 +47,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs-build
           force: true
-          force_with_lease: true
           directory: ./docs/_build/html
