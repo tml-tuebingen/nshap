@@ -11,6 +11,8 @@ The package  works with arbitrary user-defined value functions. It also provides
 
 The computed $n$-Shapley Values are an estimate [that can be inaccurate](#estimation).
 
+Documentation is available at [https://tml-tuebingen.github.io/nshap](https://tml-tuebingen.github.io/nshap/).
+
 ⚠️ Disclaimer
 
 This package does not provide an efficient way to compute Shapley Values. For this you should refer to the [shap](https://github.com/slundberg/shap/) package. In practice, the current implementation works for arbitrary functions of up to ~10 variables. This package should be used for research purposes only.
