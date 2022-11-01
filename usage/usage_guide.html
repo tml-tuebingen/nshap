@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage Guide &mdash; nshap 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Documentation" href="../nshap.html" />
+    <link rel="prev" title="A Simple Example" href="example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> nshap
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">A Simple Example</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#computing-n-shapley-values">Computing n-Shapley Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-nshapleyvalues-class">The <code class="code docutils literal notranslate"><span class="pre">nShapleyValues</span></code> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#definig-value-functions">Definig Value Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-details">Implementation Details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nshap.html">Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nshap</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Usage Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/usage/usage_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage-guide">
+<h1>Usage Guide<a class="headerlink" href="#usage-guide" title="Permalink to this heading"></a></h1>
+<section id="computing-n-shapley-values">
+<h2>Computing n-Shapley Values<a class="headerlink" href="#computing-n-shapley-values" title="Permalink to this heading"></a></h2>
+<p>The most important function in the package is</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_shapley_values</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">v_func</span><span class="p">,</span> <span class="n">n</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which provides an exact computation of n-Shapley Values. It takes 3 arguments</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">X</span></code>: A data set or a single data point for which to compute the n-Shapley Values (a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html</a>).</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">v_func</span></code>: A value function, the basic primitive in the computation of all Shapley Values (see below).</p></li>
+<li><p>The “n” of the n-Shapley Values. Defaults to the number of features (complete functional decomposition or Shapley-GAM).</p></li>
+</ul>
+<p>The function returns a list of <code class="code docutils literal notranslate"><span class="pre">nShapleyValues</span></code> for each data point, or a single object of type <code class="code docutils literal notranslate"><span class="pre">nShapleyValues</span></code> if there is only a single data point.</p>
+</section>
+<section id="the-nshapleyvalues-class">
+<h2>The <code class="code docutils literal notranslate"><span class="pre">nShapleyValues</span></code> class<a class="headerlink" href="#the-nshapleyvalues-class" title="Permalink to this heading"></a></h2>
+<p>The <code class="code docutils literal notranslate"><span class="pre">nShapleyValues</span></code> class is a python <code class="code docutils literal notranslate"><span class="pre">dict</span></code> with added functionallity. It supports the following operations.</p>
+<ul class="simple">
+<li><p>The individual attributions can be indexed with tuples of integers. For example, indexing with <code class="code docutils literal notranslate"><span class="pre">(0,)</span></code> returns the main effect of the first feature.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">plot()</span></code> generates the plots described in the paper.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">k_shapley_values(k)</span></code> computes the k-Shapley Values using the recursive relationship among n-Shapley Values of different order (requires k&lt;=n).</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">shapley_values()</span></code> returns the associated original Shapley Values as a list. Useful for compatiblity with the <a class="reference external" href="https://github.com/slundberg/shap/">https://github.com/slundberg/shap/</a> package.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">save(fname)</span></code> serializes the object to json. Can be loaded from there with <code class="code docutils literal notranslate"><span class="pre">nshap.load(fname)</span></code>. This can be useful since computing n-Shapley Values takes time, so you might want to compute them in parallel in the cloud, then aggregate the results for analysis.</p></li>
+</ul>
+</section>
+<section id="definig-value-functions">
+<h2>Definig Value Functions<a class="headerlink" href="#definig-value-functions" title="Permalink to this heading"></a></h2>
+<p>A value function has to follow the interface <code class="code docutils literal notranslate"><span class="pre">v_func(x,</span> <span class="pre">S)</span></code> where <code class="code docutils literal notranslate"><span class="pre">x</span></code> is a single data point (a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html</a>) and <code class="code docutils literal notranslate"><span class="pre">S</span></code> is a python <code class="code docutils literal notranslate"><span class="pre">list</span></code> with the indices the the coordinates that belong to the coaltion.</p>
+<p>In the introductory example with the Gradient Boosted Tree,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[])</span>
+</pre></div>
+</div>
+<p>returns the expected predicted probability that an observation belongs to class 0, and</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>returns the predicted probability that the observation <code class="code docutils literal notranslate"><span class="pre">x</span></code> belongs to class 0 (note that the problem is 10-dimensional).</p>
+</section>
+<section id="implementation-details">
+<h2>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this heading"></a></h2>
+<p>The function <code class="code docutils literal notranslate"><span class="pre">nshap.n_shapley_values</span></code> computes n-Shapley Values simply via their definition. Independent of the order <code class="code docutils literal notranslate"><span class="pre">n</span></code> of the n-Shapley Values, this requires to call the value function <code class="code docutils literal notranslate"><span class="pre">v_func</span></code> once for all 2^d subsets of coordinates. Thus, the current implementation provides no essential speedup for the computation of n-Shapley Values of lower order.</p>
+<p>The function <code class="code docutils literal notranslate"><span class="pre">nshap.vfunc.interventional_shap</span></code> approximates the interventional SHAP value function by intervening on the coordinates of randomly sampled points from the data distributions.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example.html" class="btn btn-neutral float-left" title="A Simple Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../nshap.html" class="btn btn-neutral float-right" title="Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Sebastian Bordt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
