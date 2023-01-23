@@ -22,7 +22,7 @@ def test_formulas():
     vfunc = nshap.vfunc.interventional_shap(gbtree.predict_proba, X_train, target=0)
 
     n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc)
-    shapley_gam = nshap.shapley_gam(X_test[0, :], vfunc)
+    shapley_gam = nshap.moebius_transform(X_test[0, :], vfunc)
     shapley_values = nshap.shapley_values(X_test[0, :], vfunc)
 
     assert nshap.allclose(n_shapley_values, shapley_gam)
