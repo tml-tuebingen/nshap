@@ -3,13 +3,18 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=g&style=plastic)](https://opensource.org/licenses/MIT)
 ![tests](https://github.com/tml-tuebingen/nshap/workflows/pytesting/badge.svg)
 
-This is a python package to compute $n$-Shapley Values. 
+This is a python package to compute interaction indices that extend the Shapley Value. It accompanies the AISTATS'23 paper [From Shapley Values to Generalized Additive Models and back](http://arxiv.org/abs/2209.04012) by Sebastian Bordt and Ulrike von Luxburg.
+ 
+The package currently supports 
 
-$n$-Shapley Values are a natural extension of [Shapley Values](https://proceedings.neurips.cc/paper/2017/file/8a20a8621978632d76c43dfd28b67767-Paper.pdf) and [Shapley Interaction Values](https://www.nature.com/articles/s42256-019-0138-9) and were introduced in the paper [From Shapley Values to Generalized Additive Models and back](http://arxiv.org/abs/2209.04012).
+- $n$-Shapley Values, introduced in our [paper](http://arxiv.org/abs/2209.04012)
+- [SHAP Interaction Values](https://www.nature.com/articles/s42256-019-0138-9), a popular interaction index that can also be computed with the [shap](https://github.com/slundberg/shap/) package
+- the [Shapley Taylor](https://arxiv.org/abs/1902.05622) interaction index
+- the [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index.
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
 
-The computed $n$-Shapley Values are an estimate [that can be inaccurate](#estimation).
+The computed interaction indices are an estimate [that can be inaccurate](#estimation), especially if the order of the interaction is large.
 
 Documentation is available at [https://tml-tuebingen.github.io/nshap](https://tml-tuebingen.github.io/nshap/).
 
@@ -194,8 +199,10 @@ If you use this software in your research, we encourage you to cite our paper.
   title={From Shapley Values to Generalized Additive Models and back},
   author={Bordt, Sebastian and von Luxburg, Ulrike},
   url = {https://arxiv.org/abs/2209.04012},
-  publisher = {arXiv},
-  year = {2022},
+  publisher = {AISTATS},
+  year = {2023},
 }
 ```
+
+If you use the Shapley Taylor or Faith-Shap interaction index you should also consider to cite the respective papers.
 
