@@ -182,6 +182,7 @@ def plot_interaction_index(
         handleheight=1,
     )
     ax.get_legend().set_visible(legend)
+    ax.set_title(I.type)
     if axis is None:
         plt.show()
     return ax

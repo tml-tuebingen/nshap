@@ -2,10 +2,17 @@ __version__ = "0.1.0"
 __author__ = "Sebastian Bordt"
 
 from nshap.InteractionIndex import InteractionIndex
-from nshap.nShapleyValues import nShapleyValues
+from nshap.InteractionIndex import (
+    SHAPLEY_VALUES,
+    MOEBIUS_TRANSFORM,
+    N_SHAPLEY_VALUES,
+    SHAPLEY_TAYLOR,
+    FAITH_SHAP,
+    SHAPLEY_INTERACTION_INDEX,
+)
 
 from nshap.functions import (
-    delta_S,
+    shapley_interaction_index,
     n_shapley_values,
     moebius_transform,
     shapley_values,

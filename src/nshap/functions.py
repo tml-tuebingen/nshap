@@ -33,113 +33,9 @@ bernoulli_numbers = np.array(
     ]
 )
 
-#############################################################################################################################
-#                                 These two simple functions compute n-Shapley Values
-#############################################################################################################################
-
-
-def delta_S(X, v_func, n):
-    """Compute the interaction primitive :math:`{\\Delta}_S(x)` for all points in X, and all S such that |S|=n, given a coalition value function.
-
-    Args:
-        X (numpy.ndarray): Dataset
-        v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
-        n (int): Parameter for |S|=n.
-
-    Returns:
-        List: List with a python dict for each datapoint. The dict contains the effects, indexed with sorted tuples of feature indices.
-    """
-    # for n>20, we would have to consider the numerics of the problem more carefully
-    assert n <= 20, "Computation is only supported for n<=20."
-    # parameters of the problem
-    if X.ndim == 1:
-        X = X.reshape((1, -1))
-    N = X.shape[0]
-    dim = X.shape[1]
-    result = []
-    if not isinstance(v_func, nshap.memoized_vfunc):  # meomization
-        v_func = nshap.memoized_vfunc(v_func)
-    # go over all data points
-    for i_point, x in enumerate(X):
-        result.append({})
-        # go over all subsets S of N with |S|=n
-        for S in nshap.powerset(set(range(dim))):
-            if len(S) != n:
-                continue
-            # go over all subsets T of N\S
-            phi = 0
-            N_minus_S = set(range(dim)) - set(S)
-            for T in nshap.powerset(N_minus_S):
-                # go over all subsets L of S
-                delta = 0
-                for L in nshap.powerset(S):
-                    coalition = list(L)
-                    coalition.extend(list(T))
-                    coalition.sort()
-                    delta = delta + np.power(-1, len(S) - len(L)) * v_func(x, coalition)
-                phi = phi + delta * np.math.factorial(len(T)) * np.math.factorial(
-                    dim - len(T) - len(S)
-                ) / np.math.factorial(dim - len(S) + 1)
-            result[i_point][S] = phi
-    return result
-
-
-def n_shapley_values(X, v_func, n=-1):
-    """This function provides an exact computation of n-Shapley Values via their definition.
-
-    Args:
-        X (numpy.ndarray): Dataset.
-        v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
-        n (int, optional): Order of n-Shapley Values or -1 for n=d. Defaults to -1.
-
-    Returns:
-        nshap.nShapleyValues: nshap.nShapleyValues if there is a single datapoint, or list of nshap.nShapleyValues for multipe datapoints.
-    """
-    # for n>20, we would have to consider the numerics of the problem more carefully
-    assert n <= 20, "Computation is only supported for n<=20."
-    # parameters of the problem
-    if X.ndim == 1:
-        X = X.reshape((1, -1))
-    N = X.shape[0]
-    dim = X.shape[1]
-    if n == -1:
-        n = dim
-    if not isinstance(v_func, nshap.memoized_vfunc):  # meomization
-        v_func = nshap.memoized_vfunc(v_func)
-    # first compute the raw contribution measure for all subsets of order order 1,...,n
-    delta_S_computed = [{} for i_point in range(N)]  # a list of length num_datapoints
-    for i_k in range(1, n + 1):
-        out = delta_S(X, v_func, i_k)
-        for i_point in range(N):
-            delta_S_computed[i_point].update(out[i_point])
-    results = [{} for i_point in range(N)]
-    # now perform normalization, for all datapoints
-    for i_point in range(N):
-        # consider all subsets S with 1<=|S|<=n
-        for S in nshap.powerset(range(dim)):
-            if (len(S) == 0) or (len(S) > n):
-                continue
-            # obtain the unnormalized effect (that is, delta_S(x))
-            S_effect = delta_S_computed[i_point][S]
-            # go over all subsets T of length k+1, ..., n that contain S
-            for T in nshap.powerset(range(dim)):
-                if (len(T) <= len(S)) or (len(T) > n) or (not set(S).issubset(T)):
-                    continue
-                # get the effect of T, and substract it from the effect of S
-                T_effect = delta_S_computed[i_point][T]
-                # normalization with bernoulli_numbers
-                S_effect = S_effect + (bernoulli_numbers[len(T) - len(S)]) * T_effect
-            # now we have the normalized effect
-            results[i_point][S] = S_effect
-    # return result
-    results = [nshap.nShapleyValues(x) for x in results]
-    if len(results) == 1:
-        return results[0]
-    return results
-
 
 #############################################################################################################################
-#                       These additional functions are redundant, but useful for testing purposes
+#                                               The Moebius Transform
 #############################################################################################################################
 
 
@@ -179,10 +75,15 @@ def moebius_transform(X, v_func):
                 )
             result[i_point][S] = np.sum(summands)
     # return result
-    result = [nshap.InteractionIndex("Moebius Transform", x) for x in result]
+    result = [nshap.InteractionIndex(nshap.MOEBIUS_TRANSFORM, x) for x in result]
     if len(result) == 1:
         return result[0]
     return result
+
+
+#############################################################################################################################
+#                                                   Shapley Values
+#############################################################################################################################
 
 
 def shapley_values(X, v_func):
@@ -222,10 +123,126 @@ def shapley_values(X, v_func):
                 ) / np.math.factorial(dim) * (v_i - v)
             result[i_point][(i_feature,)] = phi
     # return result
-    result = [nshap.nShapleyValues(x) for x in result]
+    result = [nshap.InteractionIndex(nshap.SHAPLEY_VALUES, x) for x in result]
     if len(result) == 1:
         return result[0]
     return result
+
+
+#############################################################################################################################
+#                                           Shapley Interaction Index
+#############################################################################################################################
+
+
+def shapley_interaction_index(X, v_func, n):
+    """Compute the Shapley Interaction Index (https://link.springer.com/article/10.1007/s001820050125) for all points in X, and all S such that |S|=n, given a coalition value function.
+
+    Args:
+        X (numpy.ndarray): Dataset
+        v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
+        n (int): Parameter for |S|=n.
+
+    Returns:
+        List: List with a python dict for each datapoint. The dict contains the effects, indexed with sorted tuples of feature indices.
+    """
+    # for n>20, we would have to consider the numerics of the problem more carefully
+    assert n <= 20, "Computation is only supported for n<=20."
+    # parameters of the problem
+    if X.ndim == 1:
+        X = X.reshape((1, -1))
+    N = X.shape[0]
+    dim = X.shape[1]
+    results = []
+    if not isinstance(v_func, nshap.memoized_vfunc):  # meomization
+        v_func = nshap.memoized_vfunc(v_func)
+    # go over all data points
+    for i_point, x in enumerate(X):
+        results.append({})
+        # go over all subsets S of N with |S|=n
+        for S in nshap.powerset(set(range(dim))):
+            if len(S) != n:
+                continue
+            # go over all subsets T of N\S
+            phi = 0
+            N_minus_S = set(range(dim)) - set(S)
+            for T in nshap.powerset(N_minus_S):
+                # go over all subsets L of S
+                delta = 0
+                for L in nshap.powerset(S):
+                    coalition = list(L)
+                    coalition.extend(list(T))
+                    coalition.sort()
+                    delta = delta + np.power(-1, len(S) - len(L)) * v_func(x, coalition)
+                phi = phi + delta * np.math.factorial(len(T)) * np.math.factorial(
+                    dim - len(T) - len(S)
+                ) / np.math.factorial(dim - len(S) + 1)
+            results[i_point][S] = phi
+    # return result
+    results = [
+        nshap.InteractionIndex(nshap.SHAPLEY_INTERACTION_INDEX, x) for x in results
+    ]
+    # if len(results) == 1:
+    #    return results[0]
+    return results
+
+
+#############################################################################################################################
+#                                                 n-Shapley Values
+#############################################################################################################################
+
+
+def n_shapley_values(X, v_func, n=-1):
+    """This function provides an exact computation of n-Shapley Values via their definition.
+
+    Args:
+        X (numpy.ndarray): Dataset.
+        v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
+        n (int, optional): Order of n-Shapley Values or -1 for n=d. Defaults to -1.
+
+    Returns:
+        nshap.nShapleyValues: nshap.nShapleyValues if there is a single datapoint, or list of nshap.nShapleyValues for multipe datapoints.
+    """
+    # for n>20, we would have to consider the numerics of the problem more carefully
+    assert n <= 20, "Computation is only supported for n<=20."
+    # parameters of the problem
+    if X.ndim == 1:
+        X = X.reshape((1, -1))
+    N = X.shape[0]
+    dim = X.shape[1]
+    if n == -1:
+        n = dim
+    if not isinstance(v_func, nshap.memoized_vfunc):  # meomization
+        v_func = nshap.memoized_vfunc(v_func)
+    # first compute the raw contribution measure for all subsets of order order 1,...,n
+    delta_S_computed = [{} for i_point in range(N)]  # a list of length num_datapoints
+    for i_k in range(1, n + 1):
+        out = shapley_interaction_index(X, v_func, i_k)
+        for i_point in range(N):
+            delta_S_computed[i_point].update(out[i_point])
+    results = [{} for i_point in range(N)]
+    # now perform normalization, for all datapoints
+    for i_point in range(N):
+        # consider all subsets S with 1<=|S|<=n
+        for S in nshap.powerset(range(dim)):
+            if (len(S) == 0) or (len(S) > n):
+                continue
+            # obtain the unnormalized effect (that is, delta_S(x))
+            S_effect = delta_S_computed[i_point][S]
+            # go over all subsets T of length k+1, ..., n that contain S
+            for T in nshap.powerset(range(dim)):
+                if (len(T) <= len(S)) or (len(T) > n) or (not set(S).issubset(T)):
+                    continue
+                # get the effect of T, and substract it from the effect of S
+                T_effect = delta_S_computed[i_point][T]
+                # normalization with bernoulli_numbers
+                S_effect = S_effect + (bernoulli_numbers[len(T) - len(S)]) * T_effect
+            # now we have the normalized effect
+            results[i_point][S] = S_effect
+    # return result
+    results = [nshap.InteractionIndex(nshap.N_SHAPLEY_VALUES, x) for x in results]
+    if len(results) == 1:
+        return results[0]
+    return results
 
 
 #############################################################################################################################
@@ -271,9 +288,11 @@ def shapley_taylor(X, v_func, n=-1):
                 for T in nshap.powerset(range(dim)):
                     if (len(T) <= len(S)) or (not set(S).issubset(T)):
                         continue
-                    results[i_point][S] += moebius[i_point][T] / math.comb(len(T), len(S))
+                    results[i_point][S] += moebius[i_point][T] / math.comb(
+                        len(T), len(S)
+                    )
     # return result
-    results = [nshap.InteractionIndex("Shapley Taylor", x) for x in results]
+    results = [nshap.InteractionIndex(nshap.SHAPLEY_TAYLOR, x) for x in results]
     if len(results) == 1:
         return results[0]
     return results
@@ -331,7 +350,7 @@ def faith_shap(X, v_func, n=-1):
                     * moebius[i_point][T]
                 )
     # return result
-    results = [nshap.InteractionIndex("Faith-Shap", x) for x in results]
+    results = [nshap.InteractionIndex(nshap.FAITH_SHAP, x) for x in results]
     if len(results) == 1:
         return results[0]
     return results
