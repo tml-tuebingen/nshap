@@ -5,7 +5,7 @@
 
 This is a python package to compute interaction indices that extend the Shapley Value. It accompanies the AISTATS'23 paper [From Shapley Values to Generalized Additive Models and back](http://arxiv.org/abs/2209.04012) by Sebastian Bordt and Ulrike von Luxburg.
  
-The package currently supports 
+The package supports 
 
 - $n$-Shapley Values, introduced in our [paper](http://arxiv.org/abs/2209.04012)
 - [SHAP Interaction Values](https://www.nature.com/articles/s42256-019-0138-9), a popular interaction index that can also be computed with the [shap](https://github.com/slundberg/shap/) package
@@ -20,7 +20,7 @@ Documentation is available at [https://tml-tuebingen.github.io/nshap](https://tm
 
 ⚠️ Disclaimer
 
-This package does not provide an efficient way to compute Shapley Values. For this you should refer to the [shap](https://github.com/slundberg/shap/) package. In practice, the current implementation works for arbitrary functions of up to ~10 variables. This package should be used for research purposes only.
+This package does not provide an efficient way to compute Shapley Values. For this you should refer to the [shap](https://github.com/slundberg/shap/) package or approaches like [FastSHAP](https://arxiv.org/abs/2107.07436). In practice, the current implementation works for arbitrary functions of up to ~10 variables. This package should be used for research purposes only.
 
 ## Setup
 
@@ -41,7 +41,7 @@ print(f'Accuracy: {accuracy_score(Y_test, gbtree.predict(X_test)):0.3f}')
 ```
 ```Accuracy: 0.829```
 
-In order to compute $n$-Shapley Values, we need to define a value function. The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function.
+Let's say that we want to compute $n$-Shapley Values. In order to do so, we need to define a value function. The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function.
 
 ```python
 import nshap
@@ -61,7 +61,7 @@ Equipped with a value function, we can compute $n$-Shapley Values.
 n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, n=10)
 ```
 
-The function returns an object of type ```nShapleyValues```. It is a python ```dict``` with some added functionallity. 
+The function returns an object of type ```InteractionIndex```. It is a python ```dict``` with some added functionallity. 
 
 To get the interaction effect between features 2 and 3, simply call
 
@@ -189,6 +189,13 @@ The folder ```notebooks\replicate-paper``` contains Jupyter Notebooks that allow
 - The notebook ```hyperparameters.ipynb``` cross-validates the parameter $k$ of the kNN classifier.
 - The notebooks ```compute.ipynb```,  ```compute-vfunc.ipynb```, ```checkerboard-compute.ipynb``` and ```checkerboard-compute-million.ipynb``` compute the different $n$-Shapley Values. You do not have to run these notebooks, the pre-computed results can be downloaded [here](https://nextcloud.tuebingen.mpg.de/index.php/s/SsowoR7SAibQYE7).
 
+⚠️ Important
+
+You have use version 0.1.0 of this package in order to run the notebooks that replicate the results in the paper.
+
+```
+pip install nshap=0.1.0
+```
 
 ## Citing nshap
 
@@ -204,5 +211,5 @@ If you use this software in your research, we encourage you to cite our paper.
 }
 ```
 
-If you use the Shapley Taylor or Faith-Shap interaction index you should also consider to cite the respective papers.
+If you use the [Shapley Taylor](https://arxiv.org/abs/1902.05622) or [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index you should also consider to cite the respective papers.
 
