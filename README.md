@@ -41,7 +41,7 @@ print(f'Accuracy: {accuracy_score(Y_test, gbtree.predict(X_test)):0.3f}')
 ```
 ```Accuracy: 0.829```
 
-Let's say that we want to compute $n$-Shapley Values. In order to do so, we need to define a value function. The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function.
+Let's say that we want to compute an interaction index. This package supports interaction indices that extend the Shapley Value. This means that the interaction index is based on a value function, just as the Shapley Value. So first, we need to define a value function. Let's use the function ```nshap.vfunc.interventional_shap```, which approximates the interventional SHAP value function.
 
 ```python
 import nshap
@@ -53,15 +53,21 @@ The function takes 4 arguments
 - The function that we want to explain
 - The training data or another sample from the data distribution
 - The target class (required here since 'predict_proba' has 2 outputs).
-- The number of samples that should be used to estimate the conditional expectation (Default: 1000)
+- The number of samples that should be used to estimate the expectation (Default: 1000)
 
-Equipped with a value function, we can compute $n$-Shapley Values.
+Equipped with a value function, we can now compute different kinds of interaction indices. Let's start with $n$-Shapley Values
 
 ```python
 n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, n=10)
 ```
 
-The function returns an object of type ```InteractionIndex```. It is a python ```dict``` with some added functionallity. 
+This function takes 3 arguments
+
+- The data point for which we want to compute the local explanation
+- The value function
+- The order of the interaction index
+
+The function returns an object of type ```InteractionIndex```. This is a python ```dict``` with some added functionallity. 
 
 To get the interaction effect between features 2 and 3, simply call
 
