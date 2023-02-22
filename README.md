@@ -5,15 +5,13 @@
 
 This is a python package to compute interaction indices that extend the Shapley Value. It accompanies the AISTATS'23 paper [From Shapley Values to Generalized Additive Models and back](http://arxiv.org/abs/2209.04012) by Sebastian Bordt and Ulrike von Luxburg.
  
-The package supports 
+The package supports, among others, 
 
 - $n$-Shapley Values, introduced in our [paper](http://arxiv.org/abs/2209.04012)
 - [SHAP Interaction Values](https://www.nature.com/articles/s42256-019-0138-9), a popular interaction index that can also be computed with the [shap](https://github.com/slundberg/shap/) package
 - the [Shapley Taylor](https://arxiv.org/abs/1902.05622) interaction index
 - the [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index.
 - the [Faith-Banzhaf](https://arxiv.org/abs/2203.00870) interaction index.
-- the [Shapley Interaction Index](https://link.springer.com/article/10.1007/s001820050125).
-- the [Banzhaf Interaction Index](https://link.springer.com/article/10.1007/s001820050125).
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
 
