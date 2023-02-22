@@ -5,27 +5,33 @@ import numpy as np
 import nshap
 
 #############################################################################################################################
-#                                       The different kinds of interaction indices
+#                            Unique string identifiers for all supported interaction indices
 #############################################################################################################################
 
 SHAPLEY_VALUES = "Shapley Values"
 MOEBIUS_TRANSFORM = "Moebius Transform"
-SHAPLEY_INTERACTION_INDEX = "Shapley Interaction Index"
+SHAPLEY_INTERACTION = "Shapley Interaction"
 N_SHAPLEY_VALUES = "n-Shapley Values"
 SHAPLEY_TAYLOR = "Shapley Taylor"
 FAITH_SHAP = "Faith-Shap"
+BANZHAF = "Banzhaf"
+BANZHAF_INTERACTION = "Banzhaf Interaction"
+FAITH_BANZHAF = "Faith-Banzhaf"
 
 ALL_INDICES = [
     SHAPLEY_VALUES,
     MOEBIUS_TRANSFORM,
-    SHAPLEY_INTERACTION_INDEX,
+    SHAPLEY_INTERACTION,
     N_SHAPLEY_VALUES,
     SHAPLEY_TAYLOR,
     FAITH_SHAP,
+    BANZHAF,
+    BANZHAF_INTERACTION,
+    FAITH_BANZHAF
 ]
 
 #############################################################################################################################
-#                                 A single class for all the different interaction indices
+#                                  A single class for all interaction indices
 #############################################################################################################################
 
 

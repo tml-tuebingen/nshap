@@ -1,14 +1,17 @@
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Sebastian Bordt"
 
 from nshap.InteractionIndex import InteractionIndex
 from nshap.InteractionIndex import (
     SHAPLEY_VALUES,
     MOEBIUS_TRANSFORM,
+    SHAPLEY_INTERACTION,
     N_SHAPLEY_VALUES,
     SHAPLEY_TAYLOR,
     FAITH_SHAP,
-    SHAPLEY_INTERACTION_INDEX,
+    BANZHAF,
+    BANZHAF_INTERACTION,
+    FAITH_BANZHAF,
 )
 
 from nshap.functions import (
@@ -18,6 +21,8 @@ from nshap.functions import (
     shapley_values,
     faith_shap,
     shapley_taylor,
+    faith_banzhaf,
+    banzhaf_interaction_index,
     bernoulli_numbers,
 )
 from nshap.plot import plot_interaction_index
