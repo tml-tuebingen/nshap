@@ -12,8 +12,8 @@ The package supports
 - the [Shapley Taylor](https://arxiv.org/abs/1902.05622) interaction index
 - the [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index.
 - the [Faith-Banzhaf](https://arxiv.org/abs/2203.00870) interaction index.
-- the [Shapley Interaction Index](https://link.springer.com/article/10.1007/s001820050125) interaction index.
-- the [Banzhaf Interaction Index](https://link.springer.com/article/10.1007/s001820050125) interaction index.
+- the [Shapley Interaction Index](https://link.springer.com/article/10.1007/s001820050125).
+- the [Banzhaf Interaction Index](https://link.springer.com/article/10.1007/s001820050125).
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
 
@@ -230,5 +230,5 @@ If you use this software in your research, we encourage you to cite our paper.
 }
 ```
 
-If you use the [Shapley Taylor](https://arxiv.org/abs/1902.05622) or [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index you should also consider to cite the respective papers.
+If you use interaction indices that were introduced in other works, such as [Shapley Taylor](https://arxiv.org/abs/1902.05622) or [Faith-Shap](https://arxiv.org/abs/2203.00870), you should also consider to cite the respective papers.
 
