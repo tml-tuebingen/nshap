@@ -7,10 +7,10 @@ This is a python package to compute interaction indices that extend the Shapley 
  
 The package supports, among others, 
 
-- $n$-Shapley Values, introduced in our [paper](http://arxiv.org/abs/2209.04012)
+- [n-Shapley Values](http://arxiv.org/abs/2209.04012), introduced in our paper
 - [SHAP Interaction Values](https://www.nature.com/articles/s42256-019-0138-9), a popular interaction index that can also be computed with the [shap](https://github.com/slundberg/shap/) package
 - the [Shapley Taylor](https://arxiv.org/abs/1902.05622) interaction index
-- the [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index.
+- the [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index
 - the [Faith-Banzhaf](https://arxiv.org/abs/2203.00870) interaction index.
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
@@ -31,7 +31,7 @@ To install the package run
 pip install nshap
 ```
 
-## Example: Computing Interaction Indices
+## Computing Interaction Indices
 
 Let's assume that we have trained a Gradient Boosted Tree on the [Folktables](https://github.com/zykls/folktables) Income data set.
 
@@ -42,7 +42,7 @@ print(f'Accuracy: {accuracy_score(Y_test, gbtree.predict(X_test)):0.3f}')
 ```
 ```Accuracy: 0.829```
 
-Let's say that we want to compute an interaction index. This package supports interaction indices that extend the Shapley Value. This means that the interaction index is based on a value function, just as the Shapley Value. So first, we need to define a value function. Let's use the function ```nshap.vfunc.interventional_shap```, which approximates the interventional SHAP value function.
+Now we want to compute an interaction index. This package supports interaction indices that extend the Shapley Value. This means that the interaction index is based on a value function, just as the Shapley Value. So we need to define a value function. We can use the function ```nshap.vfunc.interventional_shap```, which approximates the interventional SHAP value function.
 
 ```python
 import nshap
@@ -56,19 +56,31 @@ The function takes 4 arguments
 - The target class (required here since 'predict_proba' has 2 outputs).
 - The number of samples that should be used to estimate the expectation (Default: 1000)
 
-Equipped with a value function, we can now compute different kinds of interaction indices. Let's start with $n$-Shapley Values
+Equipped with a value function, we can compute different kinds of interaction indices. We can compute n-Shapley Values
 
 ```python
 n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, n=10)
 ```
 
-This function takes 3 arguments
+the Shapley-Taylor interaction index
 
-- The data point for which we want to compute the local explanation
+```python
+shapley_taylor = nshap.shapley_taylor(X_test[0, :], vfunc, n=10)
+```
+
+or the Faith-Shap interaction index of order 3
+
+```python
+faith_shap = nshap.shapley_taylor(X_test[0, :], vfunc, n=3)
+```
+
+Functions that compute interaction indices have a common interface. They take 3 arguments
+
+- The data point for which we want to compute the explanation
 - The value function
 - The order of the interaction index
 
-The function returns an object of type ```InteractionIndex```. This is a python ```dict``` with some added functionallity. 
+All functions return an object of type ```InteractionIndex```. This is a python ```dict``` with some added functionallity. 
 
 To get the interaction effect between features 2 and 3, simply call
 
@@ -78,7 +90,7 @@ n_shapley_values[(2,3)]
 
 ``` 0.0074```
 
-To visualize the interaction index, call
+To visualize an interaction index, call
 
 ```python
 n_shapley_values.plot(feature_names = feature_names)
@@ -88,7 +100,17 @@ n_shapley_values.plot(feature_names = feature_names)
   <img src="images/img1.png" width="500" alt="10-Shapley Values" />
 </p>
 
-and to compute 2-Shapley Values and generate a plot, use
+This works for all interaction indices
+
+```python
+faith_shap.plot(feature_names = feature_names)
+```
+
+<p align="left">
+  <img src="images/img1.png" width="500" alt="10-Shapley Values" />
+</p>
+
+For n-Shapley Values, we can compute interaction indices of lower order from those of higher order
 
 ```python
 n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
@@ -98,9 +120,17 @@ n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
   <img src="images/img2.png" width="500" alt="2-Shapley Values"/>
 </p>
 
-We can also compare these results with the Shapley Values returned by the [shap](https://github.com/slundberg/shap/) package.
+We can also compute the original Shapley Values and plot them with the plotting functions from the  [shap](https://github.com/slundberg/shap/) package.
 
-For this, we approximate the Shapley Values with Kernel SHAP
+```python
+shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
+```
+
+<p align="left">
+  <img src="images/img4.png" width="880" alt="Shapley Values"/>
+</p>
+
+Let us compare our result to the Shapley Values from the KernelSHAP Algorithm.
 
 ```python
 import shap
@@ -111,16 +141,6 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
 
 <p align="left">
   <img src="images/img3.png" width="800" alt="Shapley Values"/>
-</p>
-
-and then generate the same plot for the Shapley Values that we just computed with the ```nshap``` package.
-
-```python
-shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
-```
-
-<p align="left">
-  <img src="images/img4.png" width="880" alt="Shapley Values"/>
 </p>
 
 There are slight differences which is not surprising since we used two very different methods to compute the Shapley Values.
@@ -187,7 +207,7 @@ At the moment all functions computes interaction indices simply via their defini
 
 The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function by intervening on the coordinates of randomly sampled points from the data distributions.
 
-## <a name="estimation"></a> Notes on Estimation
+## <a name="estimation"></a> Accuray of the computed interaction indices
 
 The computed $n$-Shapley Values are an estimate which can be inaccurate.
 
