@@ -34,7 +34,7 @@ gbtree = xgboost.XGBClassifier()
 gbtree.fit(X_train, Y_train)
 print(f'Accuracy: {accuracy_score(Y_test, gbtree.predict(X_test)):0.3f}')
 ```
-```Accuracy: 0.829```
+```Accuracy: 0.806```
 
 In order to compute $n$-Shapley Values, we need to define a value function. The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function.
 
@@ -83,7 +83,7 @@ n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img2.png" width="500" alt="2-Shapley Values"/>
+  <img src="images/img3.png" width="500" alt="2-Shapley Values"/>
 </p>
 
 We can also compare these results with the Shapley Values returned by the [shap](https://github.com/slundberg/shap/) package.
@@ -98,7 +98,7 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
 ```
 
 <p align="left">
-  <img src="images/img3.png" width="800" alt="Shapley Values"/>
+  <img src="images/img4.png" width="800" alt="Shapley Values"/>
 </p>
 
 and then generate the same plot for the Shapley Values that we just computed with the ```nshap``` package.
@@ -108,10 +108,10 @@ shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 ```
 
 <p align="left">
-  <img src="images/img4.png" width="880" alt="Shapley Values"/>
+  <img src="images/img5.png" width="880" alt="Shapley Values"/>
 </p>
 
-There are slight differences which is not surprising since we used two very different methods to compute the Shapley Values.
+There are quite some differences which is not surprising since we used two very different methods to compute the Shapley Values.
 
 ## Overview of the package
 
