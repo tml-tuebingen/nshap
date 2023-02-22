@@ -28,26 +28,10 @@ def test_n_shapley():
     assert nshap.allclose(n_shapley_values, moebius)
     for k in range(1, X_train.shape[1]):
         k_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, k)
-        assert nshap.allclose(
-            n_shapley_values.k_shapley_values(k), k_shapley_values
-        )       
+        assert nshap.allclose(n_shapley_values.k_shapley_values(k), k_shapley_values)
         assert nshap.allclose(
             n_shapley_values.k_shapley_values(k), moebius.k_shapley_values(k)
         )
     assert nshap.allclose(n_shapley_values.k_shapley_values(1), shapley_values)
     assert nshap.allclose(moebius.k_shapley_values(1), shapley_values)
-
-
-def test_save_and_load():
-    X_train, X_test, Y_train, Y_test, _ = folktables_income()
-    X_train = X_train[:, 0:5]
-    X_test = X_test[:, 0:5]
-    gbtree = xgboost.XGBClassifier()
-    gbtree.fit(X_train, Y_train)
-
-    vfunc = nshap.vfunc.interventional_shap(gbtree.predict_proba, X_train, target=0)
-
-    n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, n)
-
-
 
