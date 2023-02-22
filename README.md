@@ -11,6 +11,9 @@ The package supports
 - [SHAP Interaction Values](https://www.nature.com/articles/s42256-019-0138-9), a popular interaction index that can also be computed with the [shap](https://github.com/slundberg/shap/) package
 - the [Shapley Taylor](https://arxiv.org/abs/1902.05622) interaction index
 - the [Faith-Shap](https://arxiv.org/abs/2203.00870) interaction index.
+- the [Faith-Banzhaf](https://arxiv.org/abs/2203.00870) interaction index.
+- the [Shapley Interaction Index](https://link.springer.com/article/10.1007/s001820050125) interaction index.
+- the [Banzhaf Interaction Index](https://link.springer.com/article/10.1007/s001820050125) interaction index.
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
 
@@ -18,7 +21,7 @@ The computed interaction indices are an estimate [that can be inaccurate](#estim
 
 Documentation is available at [https://tml-tuebingen.github.io/nshap](https://tml-tuebingen.github.io/nshap/).
 
-⚠️ Disclaimer
+⚠️ Disclaimer 
 
 This package does not provide an efficient way to compute Shapley Values. For this you should refer to the [shap](https://github.com/slundberg/shap/) package or approaches like [FastSHAP](https://arxiv.org/abs/2107.07436). In practice, the current implementation works for arbitrary functions of up to ~10 variables. This package should be used for research purposes only.
 
@@ -30,7 +33,7 @@ To install the package run
 pip install nshap
 ```
 
-## A Simple Example
+## Example: Computing Interaction Indices
 
 Let's assume that we have trained a Gradient Boosted Tree on the [Folktables](https://github.com/zykls/folktables) Income data set.
 
@@ -77,7 +80,7 @@ n_shapley_values[(2,3)]
 
 ``` 0.0074```
 
-To generate the plots in the paper, call
+To visualize the interaction index, call
 
 ```python
 n_shapley_values.plot(feature_names = feature_names)
@@ -126,31 +129,41 @@ There are slight differences which is not surprising since we used two very diff
 
 ## Overview of the package
 
-### Computing $n$-Shapley Values
+### Computing Interaction Indices
 
-The most important function in the package is ```n_shapley_values(X, v_func, n=-1)``` which computes $n$-Shapley Values. It takes 3 arguments
+The package has a separate function for the computation of each interaction index.
 
-- ```X```: A data set or a single data point for which to compute the $n$-Shapley Values ([numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html))
+- ```n_shapley_values(X, v_func, n=-1)``` for $n$-Shapley Values. 
+- ```shapley_taylor(X, v_func, n=-1)``` for the Faith-Shap Interaction Index.
+- ```faith_shap(X, v_func, n=-1)``` for the Faith-Shap Interaction Index.
 
-- ```v_func```: A value function, the basic primitive in the computation of all Shapley Values (see below)
+and so on. The parameters for all of these function are
 
-- The 'n' of the $n$-Shapley Values. Defaults to the number of features (complete functional decomposition or Shapley-GAM).
+- ```x```: A singe data point for which to compute the interaction index ([numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html))
 
-The function returns a list of ```nShapleyValues``` for each data point, or a single object of type ```nShapleyValues``` if there is only a single data point.
+- ```v_func```: A value function, the basic primitive in the computation of all computations (see below on how to define custom value functions)
 
-### The ```nShapleyValues``` class
+- ```n```, the desired order of the interaction index. Defaults to the number of features (complete functional decomposition or Shapley-GAM).
 
-The ```nShapleyValues``` class is a python ```dict``` with some added functionallity. It supports the following operations. 
+These function an object of type ```InteractionIndex```.
 
--  The individual attributions can be indexed with tuples of integers. For example, indexing with ```(0,)``` returns the main effect of the first feature.
+### The ```InteractionIndex``` class
+
+The ```InteractionIndex``` class is a python ```dict``` with some added functionallity. It supports the following operations. 
+
+-  The individual attributions can be indexed with tuples of integers. For example, indexing with ```(0,)``` returns the main effect of the first feature. Indexing with ```(0,1,2)``` returns the interaction effect between features 0, 1 and 2.
 
 - ```plot()``` generates the plots described in the paper.
 
-- ```k_shapley_values(k)``` computes the $k$-Shapley Values using the recursive relationship among $n$-Shapley Values of different order (requires $k\leq n$).
-
-- ```shapley_values()``` returns the associated original Shapley Values as a list. Useful for compatiblity with the [shap](https://github.com/slundberg/shap/) package.
+- ```sum()``` sums the individual attributions (this does usually sum to the function value minus the value of the empty coalition)
 
 - ```save(fname)``` serializes the object to json. Can be loaded from there with ```nshap.load(fname)```. This can be useful since computing $n$-Shapley Values takes time, so you might want to compute them in parallel in the cloud, then aggregate the results for analysis.
+
+Some function can only be called certain interaction indices:
+
+- ```k_shapley_values(k)``` computes the $k$-Shapley Values using the recursive relationship among $n$-Shapley Values of different order (requires $k\leq n$). Can only be called for $n$-Shapley Values.
+
+- ```shapley_values()``` returns the associated original Shapley Values as a list. Useful for compatiblity with the [shap](https://github.com/slundberg/shap/) package.
 
 ### Definig Value Functions
 
@@ -172,7 +185,7 @@ returns the predicted probability that the observation ```x``` belongs to class 
 
 ## Implementation Details
 
-The function ```nshap.n_shapley_values``` computes $n$-Shapley Values simply via their definition. Independent of the order ```n``` of the $n$-Shapley Values, this requires to call the value function ```v_func``` once for all $2^d$ subsets of coordinates. Thus, the current implementation provides no essential speedup for the computation of $n$-Shapley Values of lower order.
+At the moment all functions computes interaction indices simply via their definition. Independent of the order ```n``` of the $n$-Shapley Values, this requires to call the value function ```v_func``` once for all $2^d$ subsets of coordinates. Thus, the current implementation provides no essential speedup for the computation of $n$-Shapley Values of lower order.
 
 The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function by intervening on the coordinates of randomly sampled points from the data distributions.
 
