@@ -1,5 +1,6 @@
 data/
 figures/
+results/
 output_notebooks/
 
 # Byte-compiled / optimized / DLL files
