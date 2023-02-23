@@ -47,7 +47,7 @@ gbtree = xgboost.XGBClassifier()
 gbtree.fit(X_train, Y_train)
 print(f'Accuracy: {accuracy_score(Y_test, gbtree.predict(X_test)):0.3f}')
 ```
-```Accuracy: 0.806```
+```Accuracy: 0.830```
 
 Now we want to compute an interaction index. This package supports interaction indices that extend the Shapley Value. This means that the interaction index is based on a value function, just as the Shapley Value. So we need to define a value function. We can use the function ```nshap.vfunc.interventional_shap```, which approximates the interventional SHAP value function.
 
@@ -104,7 +104,7 @@ n_shapley_values.plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img1.png" width="500" alt="10-Shapley Values" />
+  <img src="images/img1.png" width="400" alt="10-Shapley Values" />
 </p>
 
 This works for all interaction indices
@@ -114,7 +114,7 @@ faith_shap.plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img1.png" width="500" alt="10-Shapley Values" />
+  <img src="images/img1.png" width="400" alt="10-Shapley Values" />
 </p>
 
 For n-Shapley Values, we can compute interaction indices of lower order from those of higher order
@@ -124,7 +124,7 @@ n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img3.png" width="500" alt="2-Shapley Values"/>
+  <img src="images/img3.png" width="400" alt="2-Shapley Values"/>
 </p>
 
 We can also compute the original Shapley Values and plot them with the plotting functions from the  [shap](https://github.com/slundberg/shap/) package.
@@ -134,7 +134,7 @@ shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 ```
 
 <p align="left">
-  <img src="images/img4.png" width="600" alt="Shapley Values"/>
+  <img src="images/img4.png" width="550" alt="Shapley Values"/>
 </p>
 
 Let us compare our result to the Shapley Values from the KernelSHAP Algorithm.
@@ -147,7 +147,7 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
 ```
 
 <p align="left">
-  <img src="images/img5.png" width="600" alt="Shapley Values"/>
+  <img src="images/img5.png" width="550" alt="Shapley Values"/>
 </p>
 
 There are differences which is not surprising since the KernelSHAP algorithm only approximates the Shapley Values.
