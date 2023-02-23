@@ -3,6 +3,8 @@ figures/
 results/
 output_notebooks/
 
+.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
