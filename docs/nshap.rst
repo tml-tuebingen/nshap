@@ -1,8 +1,8 @@
 Documentation
 =============
 
-Functions that compute n-Shapley Values
----------------------------------------
+Functions that compute interaction indices
+------------------------------------------
 
 .. automodule:: nshap.functions
    :members:

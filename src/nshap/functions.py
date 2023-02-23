@@ -62,7 +62,7 @@ def moebius_transform(x, v_func):
     """Compute the Moebius Transform of of the value function v_func at the data point x.
 
     Args:
-        X (numpy.ndarray): A data point.
+        x (numpy.ndarray): A data point.
         v_func (function): The value function. It takes two arguments: The datapoint x and a list with the indices of the coalition.
 
     Returns:
