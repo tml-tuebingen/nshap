@@ -107,27 +107,27 @@ faith_shap.plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img1.png" width="500" alt="10-Shapley Values" />
+  <img src="images/img2.png" width="500" alt="10-Shapley Values" />
 </p>
 
-For n-Shapley Values, we can compute interaction indices of lower order from those of higher order
+For n-Shapley Values, we can compute interaction indices of lower order from those of higher order. For n=2 and the interventional SHAP value function, n-Shapley Values are equal to the SHAP interaction values from the [shap](https://github.com/slundberg/shap/) package.  
 
 ```python
 n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img2.png" width="500" alt="2-Shapley Values"/>
+  <img src="images/img3.png" width="500" alt="2-Shapley Values"/>
 </p>
 
-We can also compute the original Shapley Values and plot them with the plotting functions from the  [shap](https://github.com/slundberg/shap/) package.
+We can also obtain the original Shapley Values and plot them with the plotting functions from the [shap](https://github.com/slundberg/shap/) package.
 
 ```python
 shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 ```
 
 <p align="left">
-  <img src="images/img4.png" width="880" alt="Shapley Values"/>
+  <img src="images/img4.png" width="780" alt="Shapley Values"/>
 </p>
 
 Let us compare our result to the Shapley Values from the KernelSHAP Algorithm.
@@ -140,10 +140,10 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
 ```
 
 <p align="left">
-  <img src="images/img3.png" width="800" alt="Shapley Values"/>
+  <img src="images/img5.png" width="800" alt="Shapley Values"/>
 </p>
 
-There are slight differences which is not surprising since we used two very different methods to compute the Shapley Values.
+There are differences which is not surprising since KernelSHAP only approximates the Shapley Values.
 
 ## Overview of the package
 
@@ -151,9 +151,9 @@ There are slight differences which is not surprising since we used two very diff
 
 The package has a separate function for the computation of each interaction index.
 
-- ```n_shapley_values(X, v_func, n=-1)``` for $n$-Shapley Values. 
-- ```shapley_taylor(X, v_func, n=-1)``` for the Faith-Shap Interaction Index.
-- ```faith_shap(X, v_func, n=-1)``` for the Faith-Shap Interaction Index.
+- ```n_shapley_values(x, v_func, n=-1)``` for $n$-Shapley Values. 
+- ```shapley_taylor(x, v_func, n=-1)``` for the Faith-Shap Interaction Index.
+- ```faith_shap(x, v_func, n=-1)``` for the Faith-Shap Interaction Index.
 
 and so on. The parameters for all of these function are
 
@@ -185,7 +185,7 @@ Some function can only be called certain interaction indices:
 
 ### Definig Value Functions
 
-A value function has to follow the interface ```v_func(x, S)``` where ```x``` is a single data point (a [numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html)) and ```S``` is a python ```list``` with the indices the the coordinates that belong to the coaltion.
+A value function can be defined as ```v_func(x, S)``` where ```x``` is a single data point (a [numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html)) and ```S``` is a python ```list``` with the indices the the coordinates that belong to the coaltion.
 
 In the introductory example with the Gradient Boosted Tree,
 
@@ -203,17 +203,17 @@ returns the predicted probability that the observation ```x``` belongs to class 
 
 ## Implementation Details
 
-At the moment all functions computes interaction indices simply via their definition. Independent of the order ```n``` of the $n$-Shapley Values, this requires to call the value function ```v_func``` once for all $2^d$ subsets of coordinates. Thus, the current implementation provides no essential speedup for the computation of $n$-Shapley Values of lower order.
+At the moment all functions compute interaction indices simply via their definition. Independent of the order ```n``` of the interaction index, this requires to call the value function ```v_func``` once for all $2^d$ subsets of coordinates. Thus, the current implementation provides no essential speedup for the computation of interaction indices of lower order.
 
 The function ```nshap.vfunc.interventional_shap``` approximates the interventional SHAP value function by intervening on the coordinates of randomly sampled points from the data distributions.
 
 ## <a name="estimation"></a> Accuray of the computed interaction indices
 
-The computed $n$-Shapley Values are an estimate which can be inaccurate.
+The computed interaction indices are an estimate which can be inaccurate.
 
-The estimation error depends on the precision of the value function. With the provided implementation of the interventional SHAP value function, the precision depends on the number of samples used to estimate the expectation.
+The estimation error depends on the precision with which we are able to evaluate the value function. With the provided implementation of the interventional SHAP value function, the precision depends on the number of samples used to estimate the expectation.
 
-A simple way to test whether your result is precisely estimated to increase the number of samples (the ```num_samples``` parameter of ```nshap.vfunc.interventional_shap```) and see if the result changes.
+A simple way to test whether an interaction index or a visualization is accurately estimated to increase the number of samples (the ```num_samples``` parameter of ```nshap.vfunc.interventional_shap```) and see if the result changes.
 
 For more details, check out the discussion in [Section 8 of our paper](http://arxiv.org/abs/2209.04012).
 
