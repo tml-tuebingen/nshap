@@ -1,5 +1,10 @@
 # Welcome to the nshap Package!
 
+
+<p align="center">
+  <img src="images/img6.png" width="800" alt="Shapley Values"/>
+</p>
+
 [![PyPi package version](https://img.shields.io/pypi/v/nshap.svg)](https://pypi.org/project/nshap/)
 [![sphinx documentation for latest release](https://github.com/tml-tuebingen/nshap/workflows/docs/badge.svg)](https://tml-tuebingen.github.io/nshap/)
 ![tests](https://github.com/tml-tuebingen/nshap/workflows/pytesting/badge.svg)
@@ -129,7 +134,7 @@ shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 ```
 
 <p align="left">
-  <img src="images/img4.png" width="880" alt="Shapley Values"/>
+  <img src="images/img4.png" width="600" alt="Shapley Values"/>
 </p>
 
 Let us compare our result to the Shapley Values from the KernelSHAP Algorithm.
@@ -142,10 +147,10 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
 ```
 
 <p align="left">
-  <img src="images/img5.png" width="880" alt="Shapley Values"/>
+  <img src="images/img5.png" width="600" alt="Shapley Values"/>
 </p>
 
-There are quite some differences which is not surprising since we used two very different methods to compute the Shapley Values.
+There are differences which is not surprising since the KernelSHAP algorithm only approximates the Shapley Values.
 
 ## Overview of the package
 
