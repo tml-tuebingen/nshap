@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="nshap",
-    version="0.1.0",
+    version="0.2.0",
     author="Sebastian Bordt",
     author_email="sbordt@posteo.de",
     description="Python package to compute n-Shapley Values.",
@@ -20,9 +20,5 @@ setuptools.setup(
     package_dir={"": "src"},
     packages=["nshap"],
     python_requires=">=3.6",
-    install_requires=[
-        "numpy",
-        "matplotlib",
-        "seaborn",
-    ],
+    install_requires=["numpy", "matplotlib", "seaborn",],
 )
