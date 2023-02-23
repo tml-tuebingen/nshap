@@ -1,7 +1,9 @@
 # Welcome to the nshap Package!
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=g&style=plastic)](https://opensource.org/licenses/MIT)
+[![PyPi package version](https://img.shields.io/pypi/v/nshap.svg)](https://pypi.org/project/nshap/)
+[![sphinx documentation for latest release](https://github.com/tml-tuebingen/nshap/workflows/docs/badge.svg)](https://tml-tuebingen.github.io/nshap/)
 ![tests](https://github.com/tml-tuebingen/nshap/workflows/pytesting/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=g&style=plastic)](https://opensource.org/licenses/MIT)
 
 This is a python package to compute interaction indices that extend the Shapley Value. It accompanies the AISTATS'23 paper [From Shapley Values to Generalized Additive Models and back](http://arxiv.org/abs/2209.04012) by Sebastian Bordt and Ulrike von Luxburg.
  
@@ -137,16 +139,6 @@ import shap
 
 explainer = shap.KernelExplainer(gbtree.predict_proba, shap.kmeans(X_train, 25))
 shap.force_plot(explainer.expected_value[0], shap_values[0])
-```
-
-<p align="left">
-  <img src="images/img4.png" width="800" alt="Shapley Values"/>
-</p>
-
-and then generate the same plot for the Shapley Values that we just computed with the ```nshap``` package.
-
-```python
-shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 ```
 
 <p align="left">
