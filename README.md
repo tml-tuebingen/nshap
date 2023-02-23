@@ -140,16 +140,6 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
 ```
 
 <p align="left">
-  <img src="images/img4.png" width="800" alt="Shapley Values"/>
-</p>
-
-and then generate the same plot for the Shapley Values that we just computed with the ```nshap``` package.
-
-```python
-shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
-```
-
-<p align="left">
   <img src="images/img5.png" width="880" alt="Shapley Values"/>
 </p>
 
