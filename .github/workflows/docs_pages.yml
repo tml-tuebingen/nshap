@@ -13,6 +13,8 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
  
     steps:
+      - uses: docker://pandoc/core
+      
       - name: Checkout
         uses: actions/checkout@v3
 
