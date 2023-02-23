@@ -17,10 +17,10 @@ Value Functions
    :undoc-members:
    :show-inheritance:
 
-The nShapleyValues class
+The InteractionIndex class
 ------------------------
 
-.. autoclass:: nshap.nShapleyValues.nShapleyValues
+.. autoclass:: nshap.InteractionIndex.InteractionIndex
    :members:
    :undoc-members:
    :show-inheritance:

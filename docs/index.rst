@@ -11,8 +11,7 @@ Welcome to the Documentation of the nshap Package!
    :caption: Contents:
 
    usage/installation
-   usage/example
-   usage/usage_guide
+   usage/examples
    nshap
 
 
