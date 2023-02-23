@@ -13,8 +13,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
  
     steps:
-      - uses: docker://pandoc/core
-      
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -31,6 +29,8 @@ jobs:
           # python -m pip install sphinxcontrib-apidoc
           python -m pip install sphinx-autoapi
           python -m pip install nbsphinx
+          python -m pip install pypandoc_binary
+          python -m pip install pypandoc
           pip install . 
       - name: make the sphinx docs
         run: |
