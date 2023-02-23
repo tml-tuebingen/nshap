@@ -23,13 +23,13 @@ jobs:
         
       - name: Install package and dependencies for building docs
         run: |
+          sudo apt-get install pandoc
           python -m pip install --upgrade pip
           python -m pip install -U sphinx
           python -m pip install sphinx-rtd-theme
           # python -m pip install sphinxcontrib-apidoc
           python -m pip install sphinx-autoapi
           python -m pip install nbsphinx
-          python -m pip install pypandoc_binary
           python -m pip install pypandoc
           pip install . 
       - name: make the sphinx docs
