@@ -5,7 +5,7 @@ from test_util import folktables_income
 import nshap
 
 
-def test_formulas():
+def test_n_shapley():
     """Compare different formulas for computing n-shapley values.
 
     (1) via delta_S
@@ -22,13 +22,16 @@ def test_formulas():
     vfunc = nshap.vfunc.interventional_shap(gbtree.predict_proba, X_train, target=0)
 
     n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc)
-    shapley_gam = nshap.shapley_gam(X_test[0, :], vfunc)
+    moebius = nshap.moebius_transform(X_test[0, :], vfunc)
     shapley_values = nshap.shapley_values(X_test[0, :], vfunc)
 
-    assert nshap.allclose(n_shapley_values, shapley_gam)
+    assert nshap.allclose(n_shapley_values, moebius)
     for k in range(1, X_train.shape[1]):
+        k_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, k)
+        assert nshap.allclose(n_shapley_values.k_shapley_values(k), k_shapley_values)
         assert nshap.allclose(
-            n_shapley_values.k_shapley_values(k), shapley_gam.k_shapley_values(k)
+            n_shapley_values.k_shapley_values(k), moebius.k_shapley_values(k)
         )
     assert nshap.allclose(n_shapley_values.k_shapley_values(1), shapley_values)
-    assert nshap.allclose(shapley_gam.k_shapley_values(1), shapley_values)
+    assert nshap.allclose(moebius.k_shapley_values(1), shapley_values)
+

@@ -6,6 +6,8 @@ import matplotlib.patches as mpatches
 
 import seaborn as sns
 
+import nshap
+
 # avoid type-3 fonts
 matplotlib.rcParams["pdf.fonttype"] = 42
 matplotlib.rcParams["ps.fonttype"] = 42
@@ -39,8 +41,8 @@ plot_colors = [
 ]
 
 
-def plot_n_shapley(
-    n_shapley_values,
+def plot_interaction_index(
+    I: nshap.InteractionIndex,
     max_degree=None,
     axis=None,
     feature_names=None,
@@ -65,18 +67,18 @@ def plot_n_shapley(
         Matplotlib axis: The plot axis.
     """
     if max_degree == 1:
-        n_shapley_values = n_shapley_values.shapley_values()
-    num_features = n_shapley_values.dim
+        I = I.shapley_values() # TODO this might have to change
+    num_features = I.d
     vmax, vmin = 0, 0
     ax = axis
     if axis is None:
         _, ax = plt.subplots(**fig_kwargs)
-    if max_degree is None or max_degree >= n_shapley_values.n:
-        max_degree = n_shapley_values.n
+    if max_degree is None or max_degree >= I.n:
+        max_degree = I.n
     ax.axhline(y=0, color="black", linestyle="-")  # line at 0
     for i_feature in range(num_features):
         bmin, bmax = 0, 0
-        v = n_shapley_values[(i_feature,)]
+        v = I[(i_feature,)]
         ax.bar(
             x=i_feature,
             height=v,
@@ -89,39 +91,35 @@ def plot_n_shapley(
         bmin = min(bmin, v)
         bmax = max(bmax, v)
         # higher-order effects, up to max_degree
-        for n_k in range(2, n_shapley_values.n + 1):
+        for n_k in range(2, I.n + 1):
             v_pos = np.sum(
                 [
-                    n_shapley_values[k] / len(k)
-                    for k in n_shapley_values.keys()
-                    if (len(k) == n_k and i_feature in k and n_shapley_values[k] > 0)
+                    I[k] / len(k)
+                    for k in I.data.keys()
+                    if (len(k) == n_k and i_feature in k and I[k] > 0)
                 ]
             )
             v_neg = np.sum(
                 [
-                    n_shapley_values[k] / len(k)
-                    for k in n_shapley_values.keys()
-                    if (len(k) == n_k and i_feature in k and n_shapley_values[k] < 0)
+                    I[k] / len(k)
+                    for k in I.data.keys()
+                    if (len(k) == n_k and i_feature in k and I[k] < 0)
                 ]
             )
             # 'max_degree or higher'
             if n_k == max_degree:
                 v_pos = np.sum(
                     [
-                        n_shapley_values[k] / len(k)
-                        for k in n_shapley_values.keys()
-                        if (
-                            len(k) >= n_k and i_feature in k and n_shapley_values[k] > 0
-                        )
+                        I[k] / len(k)
+                        for k in I.data.keys()
+                        if (len(k) >= n_k and i_feature in k and I[k] > 0)
                     ]
                 )
                 v_neg = np.sum(
                     [
-                        n_shapley_values[k] / len(k)
-                        for k in n_shapley_values.keys()
-                        if (
-                            len(k) >= n_k and i_feature in k and n_shapley_values[k] < 0
-                        )
+                        I[k] / len(k)
+                        for k in I.data.keys()
+                        if (len(k) >= n_k and i_feature in k and I[k] < 0)
                     ]
                 )
             if v_pos > 0:
@@ -157,19 +155,17 @@ def plot_n_shapley(
     # legend with custom labels
     color_patches = [mpatches.Patch(color=color) for color in plot_colors]
     lables = ["Main"]
-    if n_shapley_values.n > 1:
+    if max_degree > 1:
         lables.append("2nd order")
-    if n_shapley_values.n > 2 and max_degree > 2:
-        if max_degree == 3:
-            lables.append(f"3rd-{n_shapley_values.n}th order")
-        else:
-            lables.append(f"3rd order")
-            for i_degree in range(4, n_shapley_values.n + 1):
-                if i_degree == max_degree and max_degree < num_features:
-                    lables.append(f"{i_degree}-{n_shapley_values.n}th order")
+    if max_degree > 2:
+        lables.append(f"3rd order")
+        if max_degree > 3:
+            for i_degree in range(4, I.n + 1):
+                if i_degree == max_degree and max_degree < I.n:
+                    lables.append(f"{i_degree}-{I.n}th order")
                     break
                 else:
-                    if i_degree == n_shapley_values.n:
+                    if i_degree == I.n:
                         lables.append(f"{i_degree}th order")
                     else:
                         lables.append(f"{i_degree}th")
@@ -184,6 +180,7 @@ def plot_n_shapley(
         handleheight=1,
     )
     ax.get_legend().set_visible(legend)
+    ax.set_title(I.index_type)
     if axis is None:
         plt.show()
     return ax

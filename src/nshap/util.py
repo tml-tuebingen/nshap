@@ -31,15 +31,21 @@ def allclose(dict1, dict2, rtol=1e-05, atol=1e-08):
 
 
 def save(values, fname):
-    """Save n-Shapley Values to a JSON file.
+    """Save an interaction index to a JSON file.
 
     Args:
-        values (nshap.nShapleyValues): The n-Shapley Values.
+        values (nshap.InteractionIndex): The interaction index.
         fname (str): Filename.
     """
+    json_dict = {
+        str(k): v for k, v in values.data.items()
+    }  # convert the integer tuples to strings
+    json_dict["index_type"] = values.index_type
+    json_dict["n"] = values.n
+    json_dict["d"] = values.d
+
     with open(fname, "w+") as fp:
-        # convert the integer tuples to strings
-        fp.write(json.dumps(({str(k): v for k, v in values.data.items()}), indent=2))
+        fp.write(json.dumps(json_dict, indent=2))
 
 
 def to_int_tuple(str_tuple):
@@ -63,20 +69,33 @@ def to_int_tuple(str_tuple):
     return tuple(map(int, str_tuple.split(",")))
 
 
+def read_remove(d, key):
+    """Read and remove a key from a dict d.
+    """
+    r = d[key]
+    del d[key]
+    return r
+
+
 def load(fname):
-    """Load n-Shapley Values from a JSON file.
+    """Load an interaction index from a JSON file.
 
     Args:
         fname (str): Filename.
 
     Returns:
-        nshap.nShapleyValues: The loaded n-Shapley Values values.
+        nshap.InteractionIndex: The loaded interaction index.
     """
     with open(fname, "r") as fp:
         str_dump = json.load(fp)
-    # convert the string tuples to integer tuples
+
+    index_type = read_remove(str_dump, "index_type")
+    n = read_remove(str_dump, "n")
+    d = read_remove(str_dump, "d")
+
+    # convert the remaining string tuples to integer tuples
     python_dict = {to_int_tuple(k): v for k, v in str_dump.items()}
-    return nshap.nShapleyValues(python_dict)
+    return nshap.InteractionIndex(index_type, python_dict, n, d)
 
 
 def powerset(iterable):
