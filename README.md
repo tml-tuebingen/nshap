@@ -181,10 +181,10 @@ vfunc(x, [])
 returns the expected predicted probability that an observation belongs to class 0, and
 
 ```python
-vfunc(x, [0,1,2,3,4,5,6,7,8,9])
+vfunc(x, [0,1,2,3,4,5,6,7])
 ```
 
-returns the predicted probability that the observation ```x``` belongs to class 0 (note that the problem is 10-dimensional).
+returns the predicted probability that the observation ```x``` belongs to class 0 (note that the problem is 8-dimensional).
 
 ## Implementation Details
 
