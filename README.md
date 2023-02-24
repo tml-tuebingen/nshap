@@ -224,13 +224,12 @@ pip install nshap=0.1.0
 If you use this software in your research, we encourage you to cite our paper.
 
 ```bib
-@article{bordtlux2022,
-  title={From Shapley Values to Generalized Additive Models and back},
-  author={Bordt, Sebastian and von Luxburg, Ulrike},
-  url = {https://arxiv.org/abs/2209.04012},
-  publisher = {AISTATS},
-  year = {2023},
-}
+@inproceedings{bordtlux2023,
+  author    = {Bordt, Sebastian and von Luxburg, Ulrike},
+  title     = {From Shapley Values to Generalized Additive Models and back},
+  booktitle = {AISTATS},
+  year      = {2023}
+ }
 ```
 
 If you use interaction indices that were introduced in other works, such as [Shapley Taylor](https://arxiv.org/abs/1902.05622) or [Faith-Shap](https://arxiv.org/abs/2203.00870), you should also consider to cite the respective papers.
