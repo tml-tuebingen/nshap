@@ -130,6 +130,8 @@ n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
 We can also obtain the original Shapley Values and plot them with the plotting functions from the [shap](https://github.com/slundberg/shap/) package.
 
 ```python
+import shap
+
 shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 ```
 
@@ -140,8 +142,6 @@ shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
 Let us compare our result to the Shapley Values obtained from the KernelSHAP Algorithm.
 
 ```python
-import shap
-
 explainer = shap.KernelExplainer(gbtree.predict_proba, shap.kmeans(X_train, 25))
 shap.force_plot(explainer.expected_value[0], shap_values[0])
 ```
