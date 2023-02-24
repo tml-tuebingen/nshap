@@ -137,7 +137,7 @@ shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
   <img src="images/img4.png" width="550" alt="Shapley Values"/>
 </p>
 
-Let us compare our result to the Shapley Values from the KernelSHAP Algorithm.
+Let us compare our result to the Shapley Values obtained from the KernelSHAP Algorithm.
 
 ```python
 import shap
