@@ -66,13 +66,13 @@ The function takes 4 arguments
 Equipped with a value function, we can compute different kinds of interaction indices. We can compute n-Shapley Values
 
 ```python
-n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, n=10)
+n_shapley_values = nshap.n_shapley_values(X_test[0, :], vfunc, n=8)
 ```
 
 the Shapley-Taylor interaction index
 
 ```python
-shapley_taylor = nshap.shapley_taylor(X_test[0, :], vfunc, n=10)
+shapley_taylor = nshap.shapley_taylor(X_test[0, :], vfunc, n=8)
 ```
 
 or the Faith-Shap interaction index of order 3
