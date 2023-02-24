@@ -12,7 +12,7 @@ This is a python package to compute interaction indices that extend the Shapley 
 ![tests](https://github.com/tml-tuebingen/nshap/workflows/pytesting/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=g&style=plastic)](https://opensource.org/licenses/MIT)
 
-The package supports, among others, 
+This package supports, among others, 
 
 - [n-Shapley Values](http://arxiv.org/abs/2209.04012), introduced in our paper
 - [SHAP Interaction Values](https://www.nature.com/articles/s42256-019-0138-9), a popular interaction index that can also be computed with the [shap](https://github.com/slundberg/shap/) package
@@ -22,7 +22,7 @@ The package supports, among others,
 
 The package  works with arbitrary user-defined value functions. It also provides a model-agnostic implementation of the interventional SHAP value function. 
 
-The computed interaction indices are an estimate [that can be inaccurate](#estimation), especially if the order of the interaction is large.
+Note that the computed interaction indices are an estimate [that can be inaccurate](#estimation), especially if the order of the interaction is large.
 
 Documentation is available at [https://tml-tuebingen.github.io/nshap](https://tml-tuebingen.github.io/nshap/).
 
@@ -78,18 +78,18 @@ shapley_taylor = nshap.shapley_taylor(X_test[0, :], vfunc, n=10)
 or the Faith-Shap interaction index of order 3
 
 ```python
-faith_shap = nshap.shapley_taylor(X_test[0, :], vfunc, n=3)
+faith_shap = nshap.faith_shap(X_test[0, :], vfunc, n=3)
 ```
 
-Functions that compute interaction indices have a common interface. They take 3 arguments
+The functions that compute interaction indices have a common interface. They take 3 arguments
 
-- The data point for which we want to compute the explanation
-- The value function
-- The order of the interaction index
+- ```x```: The data point for which to compute the explanation ([numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html))
 
-All functions return an object of type ```InteractionIndex```. This is a python ```dict``` with some added functionallity. 
+- ```v_func```: The value function.
 
-To get the interaction effect between features 2 and 3, simply call
+- ```n```: The order of the interaction index.  Defaults to the number of features.
+
+All functions return an object of type ```InteractionIndex```. To get the interaction between features 2 and 3, simply call
 
 ```python
 n_shapley_values[(2,3)]
@@ -114,7 +114,7 @@ faith_shap.plot(feature_names = feature_names)
 ```
 
 <p align="left">
-  <img src="images/img1.png" width="400" alt="10-Shapley Values" />
+  <img src="images/img2.png" width="400" alt="10-Shapley Values" />
 </p>
 
 For n-Shapley Values, we can compute interaction indices of lower order from those of higher order
@@ -127,7 +127,7 @@ n_shapley_values.k_shapley_values(2).plot(feature_names = feature_names)
   <img src="images/img3.png" width="400" alt="2-Shapley Values"/>
 </p>
 
-We can also compute the original Shapley Values and plot them with the plotting functions from the  [shap](https://github.com/slundberg/shap/) package.
+We can also obtain the original Shapley Values and plot them with the plotting functions from the [shap](https://github.com/slundberg/shap/) package.
 
 ```python
 shap.force_plot(vfunc(X_test[0,:], []), n_shapley_values.shapley_values())
@@ -150,29 +150,7 @@ shap.force_plot(explainer.expected_value[0], shap_values[0])
   <img src="images/img5.png" width="550" alt="Shapley Values"/>
 </p>
 
-There are differences which is not surprising since the KernelSHAP algorithm only approximates the Shapley Values.
-
-## Overview of the package
-
-### Computing Interaction Indices
-
-The package has a separate function for the computation of each interaction index.
-
-- ```n_shapley_values(X, v_func, n=-1)``` for $n$-Shapley Values. 
-- ```shapley_taylor(X, v_func, n=-1)``` for the Faith-Shap Interaction Index.
-- ```faith_shap(X, v_func, n=-1)``` for the Faith-Shap Interaction Index.
-
-and so on. The parameters for all of these function are
-
-- ```x```: A singe data point for which to compute the interaction index ([numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html))
-
-- ```v_func```: A value function, the basic primitive in the computation of all computations (see below on how to define custom value functions)
-
-- ```n```, the desired order of the interaction index. Defaults to the number of features (complete functional decomposition or Shapley-GAM).
-
-These function an object of type ```InteractionIndex```.
-
-### The ```InteractionIndex``` class
+## The ```InteractionIndex``` class
 
 The ```InteractionIndex``` class is a python ```dict``` with some added functionallity. It supports the following operations. 
 
@@ -182,7 +160,7 @@ The ```InteractionIndex``` class is a python ```dict``` with some added function
 
 - ```sum()``` sums the individual attributions (this does usually sum to the function value minus the value of the empty coalition)
 
-- ```save(fname)``` serializes the object to json. Can be loaded from there with ```nshap.load(fname)```. This can be useful since computing $n$-Shapley Values takes time, so you might want to compute them in parallel in the cloud, then aggregate the results for analysis.
+- ```save(fname)``` serializes the object to json. Can be loaded from there with ```nshap.load(fname)```. This can be useful since computing interaction indices takes time, so you might want to compute them in parallel, then aggregate the results for analysis.
 
 Some function can only be called certain interaction indices:
 
@@ -190,7 +168,7 @@ Some function can only be called certain interaction indices:
 
 - ```shapley_values()``` returns the associated original Shapley Values as a list. Useful for compatiblity with the [shap](https://github.com/slundberg/shap/) package.
 
-### Definig Value Functions
+## Definig Value Functions
 
 A value function has to follow the interface ```v_func(x, S)``` where ```x``` is a single data point (a [numpy.ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html)) and ```S``` is a python ```list``` with the indices the the coordinates that belong to the coaltion.
 
@@ -216,7 +194,7 @@ The function ```nshap.vfunc.interventional_shap``` approximates the intervention
 
 ## <a name="estimation"></a> Accuray of the computed interaction indices
 
-The computed $n$-Shapley Values are an estimate which can be inaccurate.
+The computed interaction indices are an estimate which can be inaccurate.
 
 The estimation error depends on the precision of the value function. With the provided implementation of the interventional SHAP value function, the precision depends on the number of samples used to estimate the expectation.
 
