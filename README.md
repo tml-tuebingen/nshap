@@ -95,7 +95,7 @@ All functions return an object of type ```InteractionIndex```. To get the intera
 n_shapley_values[(2,3)]
 ```
 
-``` 0.0074```
+```-0.0054```
 
 To visualize an interaction index, call
 
