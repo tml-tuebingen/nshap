@@ -3,7 +3,8 @@ figures/
 results/
 output_notebooks/
 
-.json
+# saved interaction indices
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
