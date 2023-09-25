@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 3: Custom value functions &mdash; nshap 0.2.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=938c9ccc"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Documentation" href="../../nshap.html" />
+    <link rel="prev" title="Example 2: An Illustration of Recovery for a Function with Variable Interactions" href="Example2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            nshap
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Example1.html">Example 1: Interaction Indices for a Gradient Boosted Tree on the Folktables Income data set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example2.html">Example 2: An Illustration of Recovery for a Function with Variable Interactions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example 3: Custom value functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#These-examples-are-from-section-5.1-of-the-Faith-Shap-paper:-https://arxiv.org/abs/2203.00870">These examples are from section 5.1 of the Faith-Shap paper: https://arxiv.org/abs/2203.00870</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Example-1">Example 1</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../nshap.html">Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nshap</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Example 3: Custom value functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/usage/notebooks/Example3.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Example-3:-Custom-value-functions">
+<h1>Example 3: Custom value functions<a class="headerlink" href="#Example-3:-Custom-value-functions" title="Link to this heading"></a></h1>
+<section id="These-examples-are-from-section-5.1-of-the-Faith-Shap-paper:-https://arxiv.org/abs/2203.00870">
+<h2>These examples are from section 5.1 of the Faith-Shap paper: <a class="reference external" href="https://arxiv.org/abs/2203.00870">https://arxiv.org/abs/2203.00870</a><a class="headerlink" href="#These-examples-are-from-section-5.1-of-the-Faith-Shap-paper:-https://arxiv.org/abs/2203.00870" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import seaborn as sns
+
+sns.set_style(&quot;whitegrid&quot;)
+sns.set_context(&quot;notebook&quot;, rc={&#39;axes.linewidth&#39;: 2, &#39;grid.linewidth&#39;: 1},  font_scale=1.5)
+
+import numpy as np
+import math
+
+import nshap
+</pre></div>
+</div>
+</div>
+<section id="Example-1">
+<h3>Example 1<a class="headerlink" href="#Example-1" title="Link to this heading"></a></h3>
+<section id="A-value-function-takes-two-arguments:-A-single-data-point-x-(a-numpy.ndarray)-and-a-python-list-S-with-the-indices-the-the-coordinates-that-belong-to-the-coaltion.">
+<h4>A value function takes two arguments: A single data point x (a numpy.ndarray) and a python list S with the indices the the coordinates that belong to the coaltion.<a class="headerlink" href="#A-value-function-takes-two-arguments:-A-single-data-point-x-(a-numpy.ndarray)-and-a-python-list-S-with-the-indices-the-the-coordinates-that-belong-to-the-coaltion." title="Link to this heading"></a></h4>
+</section>
+<section id="In-this-example,-the-value-does-not-actually-depend-on-the-point-x">
+<h4>In this example, the value does not actually depend on the point x<a class="headerlink" href="#In-this-example,-the-value-does-not-actually-depend-on-the-point-x" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>p = 0.1
+def v_func(x, S):
+    &quot;&quot;&quot; The value function from Example 1 in the Faith-Shap paper.
+    &quot;&quot;&quot;
+    if len(S) &lt;= 1:
+        return 0
+    return len(S) - p * math.comb(len(S), 2)
+
+
+v_func(np.zeros((1,11)), [1,2,3,4])
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3.4
+</pre></div></div>
+</div>
+</section>
+<section id="Equipped-with-the-value-function,-we-can-compute-different-kinds-of-interaction-indices">
+<h4>Equipped with the value function, we can compute different kinds of interaction indices<a class="headerlink" href="#Equipped-with-the-value-function,-we-can-compute-different-kinds-of-interaction-indices" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>faith_shap = nshap.faith_shap(np.zeros((1,11)), v_func, 1)
+faith_shap[(0,1)], faith_shap[(1,2)]
+</pre></div>
+</div>
+</div>
+</section>
+<section id="We-can-replicate-Table-1-in-the-Faith-Shap-paper">
+<h4>We can replicate Table 1 in the Faith-Shap paper<a class="headerlink" href="#We-can-replicate-Table-1-in-the-Faith-Shap-paper" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(&#39;Table 1 in the Faith-Shap paper:\n&#39;)
+for p in [0.1, 0.2]:
+    for l in [1, 2]:
+        print(f&#39;p={p} l={l}\n&#39;)
+
+        # define the value function
+        def v_func(x, S):
+            if len(S) &lt;= 1:
+                return 0
+            return len(S) - p * math.comb(len(S), 2)
+
+        # compute interaction indices
+        faith_shap = nshap.faith_shap(np.zeros((1,11)), v_func, l)
+        shapley_taylor = nshap.shapley_taylor(np.zeros((1,11)), v_func, l)
+        shapley_interaction = nshap.shapley_interaction_index(np.zeros((1,11)), v_func, l)
+        banzhaf_interaction = nshap.banzhaf_interaction_index(np.zeros((1,11)), v_func, l)
+        faith_banzhaf = nshap.faith_banzhaf(np.zeros((1,11)), v_func, l)
+
+        # print result
+        if l == 1:
+            print(&#39;Faith-Shap: &#39;, faith_shap[(0,)])
+            print(&#39;Shapley Taylor: &#39;, shapley_taylor[(0,)])
+            print(&#39;Interaction Shapley: &#39;, shapley_interaction[(0,)])
+            print(&#39;Banzhaf Interaction: &#39;, banzhaf_interaction[(0,)])
+            print(&#39;Faith-Banzhaf: &#39;, faith_banzhaf[(0,)])
+        else:
+            print(&#39;Faith-Shap: &#39;, faith_shap[(0,)], faith_shap[(0,1)])
+            print(&#39;Shapley Taylor: &#39;, shapley_taylor[(0,)], shapley_taylor[(0,1)])
+            print(&#39;Interaction Shapley: &#39;, shapley_interaction[(0,)], shapley_interaction[(0,1)])
+            print(&#39;Banzhaf Interaction: &#39;, banzhaf_interaction[(0,)], banzhaf_interaction[(0,1)])
+            print(&#39;Faith-Banzhaf: &#39;, faith_banzhaf[(0,)], faith_banzhaf[(0,1)])
+        print(&#39;&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Table 1 in the Faith-Shap paper:
+
+p=0.1 l=1
+
+Faith-Shap:  0.5000000000001867
+Shapley Taylor:  0.500000000000185
+Interaction Shapley:  0.4999999999999939
+Banzhaf Interaction:  0.5087890624999979
+Faith-Banzhaf:  0.5087890624999989
+
+p=0.1 l=2
+
+Faith-Shap:  0.9545454545463214 -0.09090909090923938
+Shapley Taylor:  0 0.10000000000002415
+Interaction Shapley:  0.4999999999999939 -5.759281940243e-16
+Banzhaf Interaction:  0.5087890624999979 -0.11367187500000073
+Faith-Banzhaf:  1.0771484374999503 -0.11367187499999737
+
+p=0.2 l=1
+
+Faith-Shap:  1.6486811915683575e-13
+Shapley Taylor:  1.7552626019323725e-13
+Interaction Shapley:  2.7755575615628914e-17
+Banzhaf Interaction:  0.0087890625
+Faith-Banzhaf:  0.008789062500008604
+
+p=0.2 l=2
+
+Faith-Shap:  0.9545454545460967 -0.19090909090925617
+Shapley Taylor:  0 -3.7941871866564725e-14
+Interaction Shapley:  2.7755575615628914e-17 -0.10000000000000021
+Banzhaf Interaction:  0.0087890625 -0.21367187500000198
+Faith-Banzhaf:  1.0771484374999574 -0.21367187499998952
+
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example2.html" class="btn btn-neutral float-left" title="Example 2: An Illustration of Recovery for a Function with Variable Interactions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../nshap.html" class="btn btn-neutral float-right" title="Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Sebastian Bordt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
